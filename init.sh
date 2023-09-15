@@ -12,19 +12,21 @@ ssh="ssh -o StrictHostKeyChecking=accept-new"
 scp="scp -o StrictHostKeyChecking=accept-new" 
 
 # send ssh config files to node0
-$scp -r ~/.ssh/sshcloudlab batista@$node0:~/
-$scp -r ~/.ssh/sshcloudlab/config batista@$node0:~/.ssh/config
+$scp -r -q ~/.ssh/sshcloudlab batista@$node0:~/
+$scp -r -q ~/.ssh/sshcloudlab/config batista@$node0:~/.ssh/config
 $ssh $node0 "sudo chmod 700 ~/sshcloudlab; sudo chmod 600 ~/sshcloudlab/id_*; sudo chmod 644 ~/sshcloudlab/*.pub; sudo chmod +x ~/.ssh/config"
 
-git config --global user.name Elia
-git config --global user.email delime@usi.ch
+$ssh $node0 "git config --global user.name Eliã"
+$ssh $node0 "git config --global user.email delime@usi.ch"
 
 # install basics on node0
 $ssh $node0 " \
-sudo apt-get -qq --assume-yes update; \
-sudo apt-get -qq --assume-yes install htop; \
-sudo apt-get -qq --assume-yes install openjdk-11-jre-headless; \
-sudo apt-get -qq --assume-yes install golang-go;"
+sudo apt-get -q --assume-yes update > /dev/null; \
+sudo apt-get -q --assume-yes install htop > /dev/null; \
+sudo apt-get -q --assume-yes install openjdk-11-jre-headless > /dev/null; \
+sudo apt-get -q --assume-yes install golang-go > /dev/null; \
+sudo apt-get -q --assume-yes install ant > /dev/null; \
+sudo apt-get -q --assume-yes install gnuplot-nox > /dev/null;"
 
 # send script to init all other nodes
 $scp -r ./initworkers.sh batista@$node0:~/
